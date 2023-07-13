@@ -8,9 +8,11 @@ environment:
 
 dependencies:
   dio: ^5.2.1+1
+  equatable: ^2.0.5
   flutter:
     sdk: flutter
   flutter_riverpod: ^2.3.6
+  shared_preferences: ^2.2.0
 
 dev_dependencies:
   flutter_test:
