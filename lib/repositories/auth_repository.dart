@@ -1,21 +1,29 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:note_app_riv/utils/shared_preference.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-const String api = "http://34.201.57.108:8000";
+import '../network/api.dart';
 
 class AuthRepository {
-  
+  final _prefs = SharedPreferences.getInstance();
+
   final Dio _dio = Dio();
+  final String baseUrl = "$api/api/v1/auth/";
 
   Future<String> login(String username, String password) async {
+    final prefs = await _prefs;
     try {
       final response = await _dio.post(
-        '$api/api/v1/auth/login',
+        '${baseUrl}login',
         data: {
           'username': username,
           'password': password,
         },
       );
+      if (response.data['accessToken'] != null) {
+        prefs.setString(PrefsKey.token, response.data['accessToken']);
+      }
 
       return response.data['accessToken'];
     } catch (e) {
@@ -29,15 +37,21 @@ class AuthRepository {
     required String password,
     required String email,
   }) async {
+    final prefs = await _prefs;
     try {
       final response = await Dio().post(
-        '$api/api/v1/auth/signup',
+        '${baseUrl}signup',
         data: {
           'username': username,
           'password': password,
           'email': email,
         },
       );
+      if (response.data['accessToken'] != null) {
+        prefs.setString(
+            PrefsKey.token, response.data['idToken']['accessToken']);
+      }
+
       return response.data['accessToken'];
     } catch (e) {
       print(e);

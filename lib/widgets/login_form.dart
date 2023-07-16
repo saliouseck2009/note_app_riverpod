@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:note_app_riv/auth_controller.dart';
-import 'package:note_app_riv/auth_state.dart';
+import 'package:note_app_riv/controllers/auth/auth_controller.dart';
+import 'package:note_app_riv/controllers/auth/auth_state.dart';
+import 'package:note_app_riv/controllers/note/note_controller.dart';
 import 'package:note_app_riv/screens/note_list.dart';
 
 class LoginForm extends ConsumerStatefulWidget {
@@ -37,6 +38,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
       if (next is AuthSuccess) {
         Navigator.of(context).pushReplacement(
             MaterialPageRoute(builder: (context) => const MainApp()));
+        ref.read(noteControllerProvider.notifier).getNotes();
       } else if (next is AuthFailure) {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text(next.message)));

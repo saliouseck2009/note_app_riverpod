@@ -1,13 +1,13 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:note_app_riv/auth_repository.dart';
-import 'package:note_app_riv/auth_state.dart';
-import 'package:note_app_riv/utils/shared_preference.dart';
+import 'package:note_app_riv/repositories/auth_repository.dart';
+import 'package:note_app_riv/controllers/auth/auth_state.dart';
 
 class AuthController extends StateNotifier<AuthState> {
   final AuthRepository authRepository;
   //final SharedPreferences prefs =  SharedPreferences.getInstance();
-  AuthController({required this.authRepository,})
-      : super(AuthInitial());
+  AuthController({
+    required this.authRepository,
+  }) : super(AuthInitial());
 
   void login(String username, String password) async {
     state = AuthLoading();
@@ -19,7 +19,10 @@ class AuthController extends StateNotifier<AuthState> {
     }
   }
 
-  void signup(String username, String password, String email) async {
+  void signup(
+      {required String username,
+      required String password,
+      required String email}) async {
     state = AuthLoading();
     try {
       final result = await authRepository.signup(
@@ -34,6 +37,7 @@ class AuthController extends StateNotifier<AuthState> {
 final authControllerProvider =
     StateNotifierProvider<AuthController, AuthState>((ref) {
   final authRepository = ref.read(authRepositoryProvider);
-  final prefs = await ref.read(prefsProvider);
-  return AuthController(authRepository: authRepository, prefs: prefs);
+  return AuthController(
+    authRepository: authRepository,
+  );
 });

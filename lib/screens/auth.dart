@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:note_app_riv/widgets/login_form.dart';
@@ -16,8 +14,6 @@ class AuthPageToggle extends StateNotifier<bool> {
     state = !state;
   }
 }
-
-
 
 class AuthWidget extends ConsumerWidget {
   const AuthWidget({super.key});
@@ -52,7 +48,9 @@ class AuthWidget extends ConsumerWidget {
                           : Theme.of(context)
                               .textTheme
                               .headlineMedium
-                              ?.copyWith(fontWeight: FontWeight.bold)),
+                              ?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.grey)),
                 ),
                 InkWell(
                   onTap: () {
@@ -63,7 +61,9 @@ class AuthWidget extends ConsumerWidget {
                           ? Theme.of(context)
                               .textTheme
                               .headlineMedium
-                              ?.copyWith(fontWeight: FontWeight.bold)
+                              ?.copyWith(
+                                  fontWeight: FontWeight.normal,
+                                  color: Colors.grey)
                           : Theme.of(context)
                               .textTheme
                               .headlineMedium

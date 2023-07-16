@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:note_app_riv/auth_controller.dart';
-import 'package:note_app_riv/auth_state.dart';
+import 'package:note_app_riv/controllers/auth/auth_controller.dart';
+import 'package:note_app_riv/controllers/auth/auth_state.dart';
+import 'package:note_app_riv/controllers/note/note_controller.dart';
 import 'package:note_app_riv/screens/note_list.dart';
 
 class SignupForm extends ConsumerStatefulWidget {
@@ -39,6 +40,7 @@ class _SignupFormState extends ConsumerState<SignupForm> {
       if (next is AuthSuccess) {
         Navigator.of(context).pushReplacement(
             MaterialPageRoute(builder: (context) => const MainApp()));
+        ref.read(noteControllerProvider.notifier).getNotes();
       } else if (next is AuthFailure) {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text(next.message)));
@@ -70,8 +72,7 @@ class _SignupFormState extends ConsumerState<SignupForm> {
                 height: 20,
               ),
               TextFormField(
-                controller: _passwordController,
-                obscureText: true,
+                controller: _usernameController,
                 decoration: const InputDecoration(
                   hintText: 'Username',
                   //label: ,
@@ -112,6 +113,10 @@ class _SignupFormState extends ConsumerState<SignupForm> {
                         if (_formKey.currentState!.validate()) {
                           ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(content: Text('Processing Data')));
+                          ref.read(authControllerProvider.notifier).signup(
+                              username: _usernameController.text,
+                              password: _passwordController.text,
+                              email: _emailController.text);
                         }
                       },
                       icon: const Icon(Icons.check),
